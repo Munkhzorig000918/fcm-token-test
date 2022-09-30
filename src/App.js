@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import toast, { Toaster } from 'react-hot-toast';
 
-import { fetchToken, onMessageListener } from './firebase'
+import { onMessageListener, requestPermission } from './firebase'
 
 
 function App() {
@@ -13,7 +13,8 @@ function App() {
   const [isTokenFound, setTokenFound] = useState(false)
   const [getFcmToken, setFcmToken] = useState('')
 
-  fetchToken(setTokenFound, setFcmToken)
+
+  requestPermission(setTokenFound, setFcmToken)
 
   onMessageListener().then(payload => {
     console.log("payload")
