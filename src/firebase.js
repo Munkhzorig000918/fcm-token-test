@@ -41,21 +41,6 @@ export function requestPermission(setTokenFound, setFcmToken) {
   })
 }
 
-// export const fetchToken = (setTokenFound, setFcmToken) => {
-//   return getToken(messaging, { vapidKey: "BDd_4M1uYL0OoJw8xRpmeUhD88rAzRwngrr4xXkwSlyRW8J3nWiDPwb-jcv0FYhUNgzu8MNMcCvqwWpr00CnHCc" }).then((currentToken) => {
-//     if (currentToken) {
-//       setTokenFound(true)
-//       setFcmToken(currentToken)
-//     } else {
-//       console.log("No token found")
-//       setTokenFound(false)
-//       setFcmToken('')
-//     }
-//   }).catch((err) => {
-//     console.log('An error occurred while retrieving token. ', err);
-//   })
-// }
-
 export const onMessageListener = () => 
   new Promise((resolve) => {
     onMessage(messaging, (payload) => {

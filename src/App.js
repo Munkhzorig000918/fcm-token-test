@@ -36,7 +36,9 @@ function App() {
   };
 
   useEffect(() => {
+    console.log("HI my useEffect")
     if (notification?.title ){
+      console.log("Hi my conditional")
       notify()
     }
   }, [notification])
@@ -46,6 +48,7 @@ function App() {
       {isTokenFound && <h1>Notificatoin Permission Enable</h1>}
       {isTokenFound && <h6>FCM TOKEN: {getFcmToken}</h6>}
       {!isTokenFound && <h1>Permission neeeded!</h1>}
+      <Toaster />
     </div>
   );
 }
