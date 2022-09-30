@@ -9,7 +9,8 @@ var firebaseConfig = {
   projectId: "ee-mis-system",
   storageBucket: "ee-mis-system.appspot.com",
   messagingSenderId: "421164930113",
-  appId: "1:421164930113:web:9e82d5013d2b5bfbe222c0"
+  appId: "1:421164930113:web:9e82d5013d2b5bfbe222c0",
+  measurementId: "G-1TBLZQ952V"
 };
 
 firebase.initializeApp(firebaseConfig);

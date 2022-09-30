@@ -1,55 +1,50 @@
-import React, { useState } from 'react'
-import axios from 'axios'
-import Notification from './Notification'
+import React, { useState, useEffect } from 'react'
+import toast, { Toaster } from 'react-hot-toast';
+
+import { fetchToken, onMessageListener } from './firebase'
+
 
 function App() {
 
-  const [file, setFile] = useState(null)
+  const notify = () =>  toast(<ToastDisplay/>);
 
-  function fileUpload(event) {
-    setFile(event.target.files[0])
-  }
+  const [show, setShow] = useState(false)
+  const [notification, setNotification] = useState({ title: '', body: '' })
+  const [isTokenFound, setTokenFound] = useState(false)
+  const [getFcmToken, setFcmToken] = useState('')
 
-  function createProject() {
-    let data = new FormData()
-    data.append('name', 'Air condition system');
-    data.append('description', 'Air condition system is saving energy resource');
-    data.append('clientId', '1');
-    data.append('file', file, file.name);
-    data.append('projectTypeId', '1');
+  fetchToken(setTokenFound, setFcmToken)
 
-    var config = {
-      method: 'post',
-      url: 'http://localhost:5005/projects/proposal/create-project',
-      headers: { 
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJyb2xlSWQiOjJ9LCJpYXQiOjE2NjM2OTI5MjksImV4cCI6MTY2MzY5NjUyOX0.PlxeYnjLZJdisLBs1EFSpVpgnUfT54SRGkIUzVK5H1Y', 
-        'Content-Type': "multipart/form-data; boundary=<calculated when request is sent>"
-      },
-      data : data
-    };
+  onMessageListener().then(payload => {
+    console.log("payload")
+    console.log(payload)
+    setNotification({ title: payload.notification.title, body: payload.notification.body })
+    setShow(true)
+  }).catch((err) => {
+    console.log("err:")
+    console.log(err)
+  })
 
-    axios(config)
-      .then(function (response) {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
+  function ToastDisplay() {
+    return (
+      <div>
+        <p><b>{notification?.title}</b></p>
+        <p>{notification?.body}</p>
+      </div>
+    );
+  };
+
+  useEffect(() => {
+    if (notification?.title ){
+      notify()
+    }
+  }, [notification])
   
   return (
     <div style={{ width: "100vw", margin: "5rem" }}>
-      <h1>Create project</h1>
-      <br />
-      <Notification />
-      <br />
-      <br />
-      <p>file upload here</p>
-      <input onChange={fileUpload} type="file" />
-      <br />
-      <br />
-      <p>Create project now</p>
-      <button onClick={createProject}>click me</button>
+      {isTokenFound && <h1>Notificatoin Permission Enable</h1>}
+      {isTokenFound && <h6>FCM TOKEN: {getFcmToken}</h6>}
+      {!isTokenFound && <h1>Permission neeeded!</h1>}
     </div>
   );
 }
