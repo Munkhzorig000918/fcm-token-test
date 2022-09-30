@@ -16,26 +16,23 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const messaging = getMessaging(firebaseApp);
 
-export const requestForToken = () => {
-    return getToken(messaging, { vapidKey: "BDd_4M1uYL0OoJw8xRpmeUhD88rAzRwngrr4xXkwSlyRW8J3nWiDPwb-jcv0FYhUNgzu8MNMcCvqwWpr00CnHCc" })
-      .then((currentToken) => {
-        if (currentToken) {
-          console.log('current token for client: ', currentToken);
-          // Perform any other neccessary action with the token
-        } else {
-          // Show permission request UI
-          console.log('No registration token available. Request permission to generate one.');
-        }
-      })
-      .catch((err) => {
-        console.log('An error occurred while retrieving token. ', err);
-      });
-};
 
-export const onMessageListener = () =>
-  new Promise((resolve) => {
-    onMessage(messaging, (payload) => {
-      console.log("payload", payload)
-      resolve(payload);
-    });
-  });
+function requestPermission() {
+  console.log('Requesting permission...');
+  Notification.requestPermission().then((permission) => {
+    if (permission === 'granted') {
+      console.log('Notification permission granted.');
+    }
+  })
+}
+
+export const getForToken = () => getToken(messaging, { vapidKey: 'BDd_4M1uYL0OoJw8xRpmeUhD88rAzRwngrr4xXkwSlyRW8J3nWiDPwb-jcv0FYhUNgzu8MNMcCvqwWpr00CnHCc' }).then((currentToken) => {
+  if (currentToken) {
+    console.log("currentToken")
+    console.log(currentToken)
+  } else {
+    console.log('No registration token available. Request permission to generate one.');
+  }
+}).catch((err) => {
+  console.log('An error occurred while retrieving token. ', err);
+});
