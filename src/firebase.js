@@ -21,18 +21,18 @@ function requestPermission() {
   console.log('Requesting permission...');
   Notification.requestPermission().then((permission) => {
     if (permission === 'granted') {
-      console.log('Notification permission granted.');
+      return getToken(messaging, { vapidKey: 'BDd_4M1uYL0OoJw8xRpmeUhD88rAzRwngrr4xXkwSlyRW8J3nWiDPwb-jcv0FYhUNgzu8MNMcCvqwWpr00CnHCc' }).then((currentToken) => {
+        if (currentToken) {
+          console.log("currentToken")
+          console.log(currentToken)
+        } else {
+          console.log('No registration token available. Request permission to generate one.');
+        }
+      }).catch((err) => {
+        console.log('An error occurred while retrieving token. ', err);
+      });
     }
   })
 }
 
-export const getForToken = () => getToken(messaging, { vapidKey: 'BDd_4M1uYL0OoJw8xRpmeUhD88rAzRwngrr4xXkwSlyRW8J3nWiDPwb-jcv0FYhUNgzu8MNMcCvqwWpr00CnHCc' }).then((currentToken) => {
-  if (currentToken) {
-    console.log("currentToken")
-    console.log(currentToken)
-  } else {
-    console.log('No registration token available. Request permission to generate one.');
-  }
-}).catch((err) => {
-  console.log('An error occurred while retrieving token. ', err);
-});
+export const getForToken = () => requestPermission()
